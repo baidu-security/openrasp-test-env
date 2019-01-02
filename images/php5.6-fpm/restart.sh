@@ -1,0 +1,1 @@
+nohup timeout 180 /etc/init.d/php-fpm.sh restart &>/dev/null &

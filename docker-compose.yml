@@ -1,0 +1,170 @@
+version: '3'
+services:
+    apache-php5.6:
+        build:
+            context: ./images/apache-php5.6
+        image: openrasp-test/apache-php:5.6
+        hostname: apache-php5.6
+        # ports:
+        #     - "80"
+        volumes:
+            - "./shared/apache-php5.6/html:/var/www/html"
+            - "./rasp-installers/:/rasp-installers"
+            - "./shared/apache-php5.6/rasp:/rasp"
+            - "./pyhttp/:/root/pyhttp"
+            - "./test-application/:/test-application"
+        tty: true
+
+    apache-php7.2:
+        build:
+            context: ./images/apache-php7.2
+        image: openrasp-test/apache-php:7.2
+        hostname: apache-php7.2
+        # ports:
+        #     - "80"
+        volumes:
+            - "./shared/apache-php7.2/html:/var/www/html"
+            - "./rasp-installers/:/rasp-installers"
+            - "./shared/apache-php7.2/rasp:/rasp"
+            - "./pyhttp/:/root/pyhttp"
+            - "./test-application/:/test-application"
+        tty: true
+
+    nginx-php5.6:
+        build:
+            context: ./images/nginx
+            dockerfile: Dockerfile-php5.6
+        image: openrasp-test/nginx:php5.6
+        hostname: nginx-php5.6
+        # ports:
+        #     - "80"
+        volumes:
+            - "./shared/php5.6-fpm/html:/usr/share/nginx/html/"
+        tty: true
+    
+    nginx-php7.2:
+        build:
+            context: ./images/nginx
+            dockerfile: Dockerfile-php7.2
+        image: openrasp-test/nginx:php7.2
+        hostname: nginx-php7.2
+        # ports:
+        #     - "80"
+        volumes:
+            - "./shared/php7.2-fpm/html:/usr/share/nginx/html/"
+        tty: true
+
+    php5.6-fpm:
+        build:
+            context: ./images/php5.6-fpm
+        image: openrasp-test/php:5.6-fpm
+        hostname: php5.6-fpm
+        # ports:
+        #     - "9000"
+        volumes:
+            - "./shared/php5.6-fpm/html:/var/www/html/"
+            - "./rasp-installers/:/rasp-installers"
+            - "./shared/php5.6-fpm/rasp:/rasp"
+            - "./pyhttp/:/root/pyhttp"
+            - "./test-application/:/test-application"
+        tty: true
+
+    php7.2-fpm:
+        build:
+            context: ./images/php7.2-fpm
+        image: openrasp-test/php:7.2-fpm
+        hostname: php7.2-fpm
+        # ports:
+        #     - "9000"
+        volumes:
+            - "./shared/php7.2-fpm/html:/var/www/html/"
+            - "./rasp-installers/:/rasp-installers"
+            - "./shared/php7.2-fpm/rasp:/rasp"
+            - "./pyhttp/:/root/pyhttp"
+            - "./test-application/:/test-application"
+        tty: true
+
+    mysql5.6:
+        build:
+            context: ./images/mysql5.6
+        image: openrasp-test/mysql:5.6
+        hostname: mysql5.6
+        # ports:
+        #     - "3306"
+        # volumes:
+        #     - "./shared/mysql5.6/data:/var/lib/mysql/data"
+        tty: true
+
+    tomcat8:
+        build:
+            context: ./images/tomcat8
+        image: openrasp-test/tomcat8
+        hostname: tomcat8
+        # ports:
+        #     - "80"
+        volumes:
+            - "./shared/tomcat8/webapps:/usr/local/tomcat/webapps"
+            - "./rasp-installers/:/rasp-installers"
+            - "./shared/tomcat8/rasp:/usr/local/tomcat/rasp"
+            - "./pyhttp/:/root/pyhttp"
+            - "./test-application/:/test-application"
+        tty: true
+
+    rsyslog:
+        build:
+            context: ./images/rsyslog
+        image: openrasp-test/rsyslog
+        hostname: rsyslog
+        # ports:
+        #     - "514"
+        # volumes:
+        #     - "./shared/rsyslog/log:/var/log"
+        tty: true
+
+    rasp-cloud:
+        build:
+            context: ./images/rasp-cloud
+        image: openrasp-test/rasp-cloud
+        hostname: rasp-cloud
+        ports: 
+            - "8088:8080"
+        depends_on:
+            - elasticsearch6.4.2
+            - mongodb3.6
+        volumes:
+            - "./rasp-installers/:/rasp-installers/"
+            - "./config-files/logstash/cloud.conf:/etc/logstash/conf.d/cloud.conf"
+            - "./config-files/rasp-cloud:/rasp-cloud-config"
+        tty: true
+
+    elasticsearch6.4.2:
+        build:
+            context: ./images/elasticsearch6.4.2
+        image: openrasp-test/elasticsearch6.4.2
+        hostname: elasticsearch6.4.2
+        ports:
+            - "9200:9200"
+        # volumes:
+        #     - "./shared/elasticsearch6.4.2/xxx:/xxx"
+        tty: true
+
+    mongodb3.6:
+        build:
+            context: ./images/mongodb3.6
+        image: openrasp-test/mongodb3.6
+        hostname: mongodb3.6
+        # ports:
+        #     - "27017"
+        # volumes:
+        #     - "./shared/mongodb3.6/xxx:/xxx"
+        tty: true
+
+    tester:
+        build:
+            context: ./images/tester
+        image: openrasp-test/tester
+        hostname: tester
+        volumes:
+            - "./test-script/:/root/test-script/"
+            - "./shared/:/root/shared/"
+        tty: true

@@ -1,0 +1,1 @@
+nohup timeout 180 /etc/init.d/tomcat.sh restart &>/dev/null &

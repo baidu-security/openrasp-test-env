@@ -1,0 +1,1 @@
+nohup timeout 180 /etc/init.d/apache2 restart &>/dev/null &
